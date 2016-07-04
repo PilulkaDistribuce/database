@@ -41,6 +41,13 @@ class QueryBuilder
         return $this->getCollection();
     }
 
+    public function first()
+    {
+        foreach ($this->limit(1)->all() as $model) {
+            return $model;
+        }
+    }
+
     private function getCollection()
     {
         return new ModelCollection(

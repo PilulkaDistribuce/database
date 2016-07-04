@@ -18,6 +18,14 @@ class ModelCollection implements \Iterator
         $this->modelClass = $modelClass;
     }
 
+    /**
+     * @return \Iterator
+     */
+    public function getIterator()
+    {
+        return $this->iterator;
+    }
+
     public function __call($method, $arguments=[])
     {
         call_user_func_array([$this->iterator, $method], $arguments);

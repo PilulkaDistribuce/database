@@ -2,12 +2,19 @@
 
 namespace Pilulka\Database;
 
-abstract class Model implements \JsonSerializable
+/**
+ * Class Model
+ * @package Pilulka\Database
+ * @method static static first()
+ * @method static static[] all()
+ */
+class Model implements \JsonSerializable
 {
 
     protected $table;
     protected $connection;
     protected $touches = [];
+    private $modified = [];
     protected $row;
 
     /** @var ConnectionResolver */
@@ -15,8 +22,17 @@ abstract class Model implements \JsonSerializable
 
     public function __get($name)
     {
-        return $this->row[$name];
+        return isset($this->modified[$name]) ? $this->modified[$name] : $this->row[$name];
     }
+
+    public function __set($name, $value)
+    {
+        $this->modified[$name] = $value;
+        if(isset($this->row)) {
+            $this->row[$name] = $value;
+        }
+    }
+
 
     final protected function getRelated($modelClass, $via=null)
     {
@@ -35,12 +51,12 @@ abstract class Model implements \JsonSerializable
             : null;
     }
 
-    protected function getRelatedMany($modelClass, $params, $mappedBy=null)
+    final protected function getRelatedMany($modelClass, $filter, $mappedBy=null)
     {
         $this->protectIfRowIsNotLoaded();
         $result = call_user_func_array(
             [$this->row, $this->getModelTableByClass($modelClass)],
-            $params
+            $filter
         );
         if(isset($mappedBy)) {
             $result->via($mappedBy);
@@ -51,15 +67,23 @@ abstract class Model implements \JsonSerializable
         );
     }
 
-    public function save(array $data)
+    public function save(array $data=[])
     {
+        $this->fill($data);
         if(isset($this->row)) {
-
+            $this->row->update($this->modified);
         } else {
             $this->row = static::getQuery()->insert(
                 $this->getModelTableByClass(static::class),
-                $data
+                $this->modified
             );
+        }
+    }
+
+    private function fill($data)
+    {
+        foreach ($data as $key=>$value) {
+            $this->$key = $value;
         }
     }
 
@@ -106,6 +130,20 @@ abstract class Model implements \JsonSerializable
             );
         }
         return self::$resolver->instance($this->connection);
+    }
+
+    public function delete()
+    {
+        if(isset($this->row)) {
+            $this->row->delete();
+            $this->reset();
+        }
+    }
+
+    private function reset()
+    {
+        $this->modified = [];
+        $this->row = null;
     }
 
     public static function setConnectionResolver(ConnectionResolver $resolver)

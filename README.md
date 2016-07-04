@@ -1,1 +1,1 @@
-# database
+# Pilulka database package
