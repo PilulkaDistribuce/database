@@ -1,6 +1,7 @@
 <?php
 
 namespace Pilulka\Database;
+use Pilulka\Core\Facade;
 
 /**
  * Class Model
@@ -28,17 +29,17 @@ class Model implements \JsonSerializable
     public function __set($name, $value)
     {
         $this->modified[$name] = $value;
-        if(isset($this->row)) {
+        if (isset($this->row)) {
             $this->row[$name] = $value;
         }
     }
 
 
-    final protected function getRelated($modelClass, $via=null)
+    final protected function getRelated($modelClass, $via = null)
     {
         $this->protectIfRowIsNotLoaded();
         $modelTable = $this->getModelTableByClass($modelClass);
-        if(isset($via)) {
+        if (isset($via)) {
             StructureConvention::addReference(
                 $this->table(),
                 $via,
@@ -51,14 +52,14 @@ class Model implements \JsonSerializable
             : null;
     }
 
-    final protected function getRelatedMany($modelClass, $filter, $mappedBy=null)
+    final protected function getRelatedMany($modelClass, $filter, $mappedBy = null)
     {
         $this->protectIfRowIsNotLoaded();
         $result = call_user_func_array(
             [$this->row, $this->getModelTableByClass($modelClass)],
             $filter
         );
-        if(isset($mappedBy)) {
+        if (isset($mappedBy)) {
             $result->via($mappedBy);
         }
         return new ModelCollection(
@@ -67,10 +68,10 @@ class Model implements \JsonSerializable
         );
     }
 
-    public function save(array $data=[])
+    public function save(array $data = [])
     {
         $this->fill($data);
-        if(isset($this->row)) {
+        if (isset($this->row)) {
             $this->row->update($this->modified);
         } else {
             $this->row = static::getQuery()->insert(
@@ -82,7 +83,7 @@ class Model implements \JsonSerializable
 
     private function fill($data)
     {
-        foreach ($data as $key=>$value) {
+        foreach ($data as $key => $value) {
             $this->$key = $value;
         }
     }
@@ -94,7 +95,7 @@ class Model implements \JsonSerializable
 
     private function protectIfRowIsNotLoaded()
     {
-        if(!isset($this->row)) {
+        if (!isset($this->row)) {
             throw new Exception(
                 sprintf("Row data is not loaded for: %s.", static::class)
             );
@@ -109,13 +110,13 @@ class Model implements \JsonSerializable
         );
     }
 
-    public function __call($method, $arguments=[])
+    public function __call($method, $arguments = [])
     {
         $query = $this->getQuery()->table($this->table());
         return call_user_func_array([$query, $method], $arguments);
     }
 
-    public static function __callStatic($method, $arguments=[])
+    public static function __callStatic($method, $arguments = [])
     {
         $instance = new static;
         return call_user_func_array([$instance, $method], $arguments);
@@ -123,7 +124,7 @@ class Model implements \JsonSerializable
 
     private function resolveConnection()
     {
-        if(!isset(self::$resolver)) {
+        if (!isset(self::$resolver)) {
             throw new Exception(
                 "Connection resolver is not defined. " .
                 "Check your application setup."
@@ -134,7 +135,7 @@ class Model implements \JsonSerializable
 
     public function delete()
     {
-        if(isset($this->row)) {
+        if (isset($this->row)) {
             $this->row->delete();
             $this->reset();
         }
@@ -146,12 +147,18 @@ class Model implements \JsonSerializable
         $this->row = null;
     }
 
-    public static function setConnectionResolver(ConnectionResolver $resolver)
+    public static function setConnectionResolver($resolver)
     {
+        if (!$resolver instanceof ConnectionResolver || !$resolver instanceof Facade) {
+            throw new Exception(
+                "Resolver must instance of ConnectionResolver " .
+                "or to it's Facade class."
+            );
+        }
         self::$resolver = $resolver;
     }
 
-    public function jsonSerialize($options=0)
+    public function jsonSerialize($options = 0)
     {
         return json_encode($this->__toArray(), $options);
     }
