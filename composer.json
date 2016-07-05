@@ -7,7 +7,6 @@
       "email": "mnohosten@gmail.com"
     }
   ],
-  "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
       "Pilulka\\Database\\": "src/"
