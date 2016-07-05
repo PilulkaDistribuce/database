@@ -149,7 +149,7 @@ class Model implements \JsonSerializable
 
     public static function setConnectionResolver($resolver)
     {
-        if (!$resolver instanceof ConnectionResolver || !$resolver instanceof Facade) {
+        if (!$resolver instanceof ConnectionResolver && !$resolver instanceof Facade) {
             throw new Exception(
                 "Resolver must instance of ConnectionResolver " .
                 "or to it's Facade class."
