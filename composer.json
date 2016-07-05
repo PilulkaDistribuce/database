@@ -20,6 +20,6 @@
   "require-dev": {
     "doctrine/dbal": "^2.5",
     "phpunit/phpunit": "^5.4",
-    "tracy/tracy": "^2.4"
+    "tracy/tracy": "*"
   }
 }
