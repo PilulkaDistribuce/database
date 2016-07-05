@@ -15,11 +15,11 @@
   },
   "require": {
     "vrana/notorm": "dev-master",
-    "pilulka/core": "^1.0",
-    "tracy/tracy": "^2.4"
+    "pilulka/core": "^1.0"
   },
   "require-dev": {
     "doctrine/dbal": "^2.5",
-    "phpunit/phpunit": "^5.4"
+    "phpunit/phpunit": "^5.4",
+    "tracy/tracy": "^2.4"
   }
 }
