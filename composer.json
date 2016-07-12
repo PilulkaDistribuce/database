@@ -17,7 +17,6 @@
     "pilulka/core": "^1.0"
   },
   "require-dev": {
-    "doctrine/dbal": "^2.5",
-    "phpunit/phpunit": "^5.4"
+    "phpunit/phpunit": "^4.8"
   }
 }
