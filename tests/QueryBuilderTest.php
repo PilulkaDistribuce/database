@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . "/test_base.php";
-
 use Pilulka\Database\QueryBuilder;
 
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
