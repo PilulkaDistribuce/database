@@ -8,6 +8,12 @@ use Pilulka\Core\Facade;
  * @package Pilulka\Database
  * @method static static first()
  * @method static static[] all()
+ * @method static static | static[] where(...$args)
+ * @method static static | static[] order($order)
+ * @method static static | static[] limit($limit, $offset=null)
+ * @method static static | static[] group($group)
+ * @method static int count($column=null)
+ * @method static int sum($column)
  */
 class Model implements \JsonSerializable
 {
@@ -68,6 +74,10 @@ class Model implements \JsonSerializable
         );
     }
 
+    /**
+     * @param array $data
+     * @return static
+     */
     public function save(array $data = [])
     {
         $this->fill($data);
@@ -79,6 +89,7 @@ class Model implements \JsonSerializable
                 $this->modified
             );
         }
+        return $this;
     }
 
     private function fill($data)
