@@ -25,6 +25,16 @@ class QueryBuilder
         return $this;
     }
 
+    public function firstOrNew($filter=[])
+    {
+        $model = $this->where($filter)->first();
+        if(!$model) {
+            $model = new $this->modelClass;
+            $model->fill($filter);
+        }
+        return $model;
+    }
+
     public function insert($table, $data)
     {
         $this->table($table);
