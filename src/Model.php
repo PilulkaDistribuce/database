@@ -92,7 +92,7 @@ class Model implements \JsonSerializable
         return $this;
     }
 
-    private function fill($data)
+    public function fill($data)
     {
         foreach ($data as $key => $value) {
             $this->$key = $value;
