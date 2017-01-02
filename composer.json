@@ -1,6 +1,7 @@
 {
   "name": "pilulka/database",
   "license": "MIT",
+  "description": "Pilulka Database package is ORM abstraction layer made on top of NotORM database layer.",
   "authors": [
     {
       "name": "Martin Krizan",

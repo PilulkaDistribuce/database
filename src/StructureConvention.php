@@ -26,3 +26,4 @@ class StructureConvention extends \NotORM_Structure_Convention
     }
 
 }
+
