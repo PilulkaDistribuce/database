@@ -1,7 +1,7 @@
 # Pilulka database package
 
 [![Author](https://img.shields.io/badge/author-@martinkrizan-blue.svg?style=flat-square)](https://twitter.com/martinkrizan)
-[![Build Status](https://img.shields.io/travis/pilulkacz/database/master.svg?style=flat-square)](https://travis-ci.org/pilulkacz/database)
+[![Build Status](https://travis-ci.org/PilulkaDistribuce/database.svg?branch=master)](https://travis-ci.org/PilulkaDistribuce/database)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7c094887-fde9-40c8-bd46-f2cdcadc53c8/big.png)](https://insight.sensiolabs.com/projects/7c094887-fde9-40c8-bd46-f2cdcadc53c8)
